@@ -22,8 +22,8 @@ var minimapcamera = document.getElementById("minimapcamera").style;
 
 var graphcanvas = document.getElementById("graphcanvas");
 var graphctx = graphcanvas.getContext("2d");
-var graphheight = 250;
-var graphwidth = 400;
+var graphheight = 400;
+var graphwidth = 500;
 
 var minimapcanvas = document.getElementById("minimap");
 var minimapctx = minimapcanvas.getContext("2d");
@@ -56,7 +56,7 @@ var zoom = 70;
 
 var mutable_floor = false;
 
-var maxFloorTiles = 200;
+var maxFloorTiles = 300;
 var cw_floorTiles = new Array();
 var last_drawn_tile = 0;
 
@@ -68,8 +68,9 @@ var chassisMinAxis = 0.1;
 var chassisMinDensity = 30;
 var chassisMaxDensity = 300;
 
-var wheelMaxRadius = 0.5;
-var wheelMinRadius = 0.2;
+var numWheels = 3;
+var wheelMaxRadius = 0.8;
+var wheelMinRadius = 0.1;
 var wheelMaxDensity = 100;
 var wheelMinDensity = 40;
 
@@ -105,7 +106,7 @@ function showDistance(distance, height) {
   distanceMeter.innerHTML = "distance: "+distance+" meters<br />";
   distanceMeter.innerHTML += "height: "+height+" meters";
   if(distance > minimapfogdistance) {
-    fogdistance.width = 800 - Math.round(distance + 15) * minimapscale + "px";
+    fogdistance.width = 1200 - Math.round(distance + 15) * minimapscale + "px";
     minimapfogdistance = distance;
   }
 }
@@ -297,7 +298,7 @@ function cw_createRandomCar() {
   var v = [];
   var car_def = new Object();
   
-  car_def.wheelCount = 3; 
+  car_def.wheelCount = numWheels; 
   
   car_def.wheel_radius = [];
   car_def.wheel_density = [];
@@ -603,7 +604,7 @@ function cw_setMutation(mutation) {
 function cw_setMutationRange(range) {
   mutation_range = parseFloat(range);
 }
-
+  
 function cw_setMutableFloor(choice) {
   mutable_floor = (choice==1);
 }

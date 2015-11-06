@@ -22,6 +22,7 @@
         top: 20px;
         width: 300px;
         height: 400px;
+		margin-left:5px;
       }
 
       #graphholder {
@@ -34,10 +35,10 @@
         font-size: 9px;
       }
 
-      #s0 { top: 240px; }
-      #s25 { top: 187px; }
-      #s50 { top: 125px; }
-      #s75 { top: 62px; }
+      #s0 { top: 400px; }
+      #s25 { top: 300px; }
+      #s50 { top: 200px; }
+      #s75 { top: 100px; }
       #s100 { top: 0px; }
 
       #graphcanvas {
@@ -49,14 +50,14 @@
         height: 400px;
         position: absolute;
         top: 420px;
-        left: 445px;
+        left: 545px;
         font-size: 11px;
       }
 
       #minimapholder {
         position: relative;
         border: 1px solid black;
-        width: 800px;
+        width: 1200px;
         height: 200px;
         overflow: hidden;
       }
@@ -83,7 +84,7 @@
       }
 
       #minimapfog {
-        width: 798px;
+        width: 1198px;
         height: 198px;
         position: absolute;
         top: 1px;
@@ -107,7 +108,7 @@
         position: relative;
         border: 1px solid #444;
         width: 100px;
-        height: 15px;
+        height: 10px;
         padding: 2px;
         margin-left: 23px;
       }
@@ -125,28 +126,16 @@
         }
 
     </style>
-    <script type="text/javascript">
-
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-25432661-3']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-
-    </script>
+   
   </head>
   <body>
     <canvas id="mainbox" width="800" height="400"></canvas>
     <div id="graphholder">
-      <canvas id="graphcanvas" width="400" height="250"></canvas>
-      <div class="scale" id="s100">250</div>
-      <div class="scale" id="s75">187</div>
-      <div class="scale" id="s50">125</div>
-      <div class="scale" id="s25">62</div>
+      <canvas id="graphcanvas" width="500" height="400"></canvas>
+      <div class="scale" id="s100">400</div>
+      <div class="scale" id="s75">300</div>
+      <div class="scale" id="s50">200</div>
+      <div class="scale" id="s25">100</div>
       <div class="scale" id="s0">0</div>
     </div>
     <div id="minimapholder">
@@ -161,12 +150,7 @@
     </div>
     <div id="debug"></div>
     <div id="data">
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
-<input type="hidden" name="cmd" value="_s-xclick">
-<input type="hidden" name="hosted_button_id" value="X8VB9NDYWQDPE">
-<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-<img alt="" border="0" src="https://www.paypalobjects.com/pt_BR/i/scr/pixel.gif" width="1" height="1">
-</form>
+ 
 <br />
       <input type="button" value="Save Population" onclick="saveProgress();" />
       <input type="button" value="Restore Saved Population" onclick="restoreProgress();" />
@@ -213,6 +197,7 @@
           <option value="1.0" selected="selected">100%</option>
         </select>
       </div>
+	  
       <div>
         Floor:
         <select id="floor" onchange="cw_setMutableFloor(this.options[this.selectedIndex].value)">
@@ -284,11 +269,7 @@
       - Wheel position: (2 genes, 1 per wheel)<br />
       - Wheel density: (2 genes, 1 per wheel) darker wheels mean denser wheels<br />
       - Chassis density: (1 gene) darker body means denser chassis
-      <h3>Blurb</h3>
-      This is not as deterministic as it should be, so your best car may not perform as well as it once did. The terrain gets more complex with distance.<br />
-      I'm not in the mood to deal with checking if all scripts have loaded before running, so refresh the page if things seem whack.<br />
-      Written by <a href="http://rednuht.org">this guy</a>.<br />
-      <a href="mailto:rednuht@rednuht.org">Send me food</a>.
+     
     </div>
     <div name="minimapmarker" class="minimapmarker"></div>
     <div name="healthbar" class="healthbar" onclick="cw_setCameraTarget(this.car_index)">
