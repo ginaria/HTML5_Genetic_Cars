@@ -52,7 +52,7 @@ var doSleep = true;
 
 var world;
 
-var zoom = 70;
+var zoom = 50;
 
 var mutable_floor = false;
 
@@ -68,7 +68,7 @@ var chassisMinAxis = 0.1;
 var chassisMinDensity = 30;
 var chassisMaxDensity = 300;
 
-var numWheels = 3;
+var numWheels = 2;
 var wheelMaxRadius = 0.8;
 var wheelMinRadius = 0.1;
 var wheelMaxDensity = 100;
@@ -391,16 +391,11 @@ function cw_nextGeneration() {
   }
   for(k = gen_champions; k < generationSize; k++) {
     var parent1 = cw_getParents();
-	/* 
-	alert ("Car " + k + " parent1 is " + parent1);
-    */
 	var parent2 = parent1;
     while(parent2 == parent1) {
       parent2 = cw_getParents();
     }
-	/*
-	alert ("Car " + k + " parent2 is " + parent2);
-    */
+	
 	newborn = cw_makeChild(cw_carScores[parent1].car_def,
                            cw_carScores[parent2].car_def);
     newborn = cw_mutate(newborn);
