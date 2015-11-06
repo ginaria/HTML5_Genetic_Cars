@@ -132,7 +132,7 @@ cw_Car.prototype.__constructor = function(car_def) {
   this.is_elite = car_def.is_elite;
   this.healthBar = document.getElementById("health"+car_def.index).style;
   this.healthBarText = document.getElementById("health"+car_def.index).nextSibling.nextSibling;
-  this.healthBarText.innerHTML = car_def.index;
+  this.healthBarText.innerHTML = car_def.index /*+ "Test" + JSON.stringify(car_def)*/;
   this.minimapmarker = document.getElementById("bar"+car_def.index);
 
   if(this.is_elite) {
@@ -297,27 +297,27 @@ function cw_createRandomCar() {
   var v = [];
   var car_def = new Object();
   
-  car_def.wheelCount = 2; 
+  car_def.wheelCount = 3; 
   
   car_def.wheel_radius = [];
   car_def.wheel_density = [];
   car_def.wheel_vertex = [];
   for (var i = 0; i < car_def.wheelCount; i++){
-    car_def.wheel_radius[i] = Math.random()*wheelMaxRadius+wheelMinRadius;
-    car_def.wheel_density[i] = Math.random()*wheelMaxDensity+wheelMinDensity;
+    car_def.wheel_radius[i] = Math.round((Math.random()*wheelMaxRadius+wheelMinRadius)*1000)/1000;
+    car_def.wheel_density[i] = Math.round((Math.random()*wheelMaxDensity+wheelMinDensity)*1000)/1000;
   }
   
-  car_def.chassis_density = Math.random()*chassisMaxDensity+chassisMinDensity
+  car_def.chassis_density = Math.round((Math.random()*chassisMaxDensity)*1000)/1000+chassisMinDensity;
 
   car_def.vertex_list = new Array();
-  car_def.vertex_list.push(new b2Vec2(Math.random()*chassisMaxAxis + chassisMinAxis,0));
-  car_def.vertex_list.push(new b2Vec2(Math.random()*chassisMaxAxis + chassisMinAxis,Math.random()*chassisMaxAxis + chassisMinAxis));
-  car_def.vertex_list.push(new b2Vec2(0,Math.random()*chassisMaxAxis + chassisMinAxis));
-  car_def.vertex_list.push(new b2Vec2(-Math.random()*chassisMaxAxis - chassisMinAxis,Math.random()*chassisMaxAxis + chassisMinAxis));
-  car_def.vertex_list.push(new b2Vec2(-Math.random()*chassisMaxAxis - chassisMinAxis,0));
-  car_def.vertex_list.push(new b2Vec2(-Math.random()*chassisMaxAxis - chassisMinAxis,-Math.random()*chassisMaxAxis - chassisMinAxis));
-  car_def.vertex_list.push(new b2Vec2(0,-Math.random()*chassisMaxAxis - chassisMinAxis));
-  car_def.vertex_list.push(new b2Vec2(Math.random()*chassisMaxAxis + chassisMinAxis,-Math.random()*chassisMaxAxis - chassisMinAxis));
+  car_def.vertex_list.push(new b2Vec2(Math.round((Math.random()*chassisMaxAxis)*1000)/1000 + chassisMinAxis,0));
+  car_def.vertex_list.push(new b2Vec2(Math.round((Math.random()*chassisMaxAxis)*1000)/1000 + chassisMinAxis,Math.round((Math.random()*chassisMaxAxis)*1000)/1000 + chassisMinAxis));
+  car_def.vertex_list.push(new b2Vec2(0,Math.round((Math.random()*chassisMaxAxis)*1000)/1000 + chassisMinAxis));
+  car_def.vertex_list.push(new b2Vec2(-Math.round((Math.random()*chassisMaxAxis)*1000)/1000 - chassisMinAxis,Math.round((Math.random()*chassisMaxAxis)*1000)/1000 + chassisMinAxis));
+  car_def.vertex_list.push(new b2Vec2(-Math.round((Math.random()*chassisMaxAxis)*1000)/1000 - chassisMinAxis,0));
+  car_def.vertex_list.push(new b2Vec2(-Math.round((Math.random()*chassisMaxAxis)*1000)/1000 - chassisMinAxis,-Math.round((Math.random()*chassisMaxAxis)*1000)/1000 - chassisMinAxis));
+  car_def.vertex_list.push(new b2Vec2(0,-Math.round((Math.random()*chassisMaxAxis)*1000)/1000 - chassisMinAxis));
+  car_def.vertex_list.push(new b2Vec2(Math.round((Math.random()*chassisMaxAxis)*1000)/1000 + chassisMinAxis,-Math.round((Math.random()*chassisMaxAxis)*1000)/1000 - chassisMinAxis));
 
   var left = [];
   for (var i = 0; i < 8; i++){
@@ -369,6 +369,20 @@ function cw_nextGeneration() {
   cw_getChampions();
   cw_topScores.push({i:gen_counter,v:cw_carScores[0].v,x:cw_carScores[0].x,y:cw_carScores[0].y,y2:cw_carScores[0].y2});
   plot_graphs();
+  
+  var totalFitness=0;
+  var currentFitness=0;
+  
+  for (var k=0; k < generationSize; k++) {
+	  totalFitness+=cw_carScores[k].v;
+  }
+
+  for (var k=0; k < generationSize; k++) {
+	  cw_carScores[k].fitness=currentFitness+(cw_carScores[k].v/totalFitness);
+ 
+	  currentFitness+=(cw_carScores[k].v/totalFitness);
+  }
+  
   for(var k = 0; k < gen_champions; k++) {
     cw_carScores[k].car_def.is_elite = true;
     cw_carScores[k].car_def.index = k;
@@ -376,11 +390,17 @@ function cw_nextGeneration() {
   }
   for(k = gen_champions; k < generationSize; k++) {
     var parent1 = cw_getParents();
-    var parent2 = parent1;
+	/* 
+	alert ("Car " + k + " parent1 is " + parent1);
+    */
+	var parent2 = parent1;
     while(parent2 == parent1) {
       parent2 = cw_getParents();
     }
-    newborn = cw_makeChild(cw_carScores[parent1].car_def,
+	/*
+	alert ("Car " + k + " parent2 is " + parent2);
+    */
+	newborn = cw_makeChild(cw_carScores[parent1].car_def,
                            cw_carScores[parent2].car_def);
     newborn = cw_mutate(newborn);
     newborn.is_elite = false;
@@ -413,7 +433,18 @@ function cw_getParents() {
     var r = Math.random();
     if (r == 0)
         return 0;
-    return Math.floor(-Math.log(r) * generationSize) % generationSize;
+	var y=Math.random();
+	var parentCar=0;
+	
+	for (var k = 0; k < generationSize; k++) {
+		if (y < cw_carScores[k].fitness) {
+			parentCar=k;
+		break;
+		}
+	}
+
+	return parentCar;
+;
 }
 
 function cw_makeChild(car_def1, car_def2) {
